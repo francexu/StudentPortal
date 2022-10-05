@@ -14,7 +14,7 @@ export class StudentsComponent implements OnInit {
   // make sure that you import the right model from UI model not API
   students: Student[] = [];
   // from angular material documentation
-  displayedColumns: string[] = ['firstName', 'lastName', 'dateOfBirth', 'email', 'mobile', 'gender'];
+  displayedColumns: string[] = ['firstName', 'lastName', 'dateOfBirth', 'email', 'mobile', 'gender', 'edit'];
   dataSource: MatTableDataSource<Student> = new MatTableDataSource<Student>();
   // to link paginator with table
   @ViewChild(MatPaginator) matPaginator!: MatPaginator;
@@ -27,7 +27,7 @@ export class StudentsComponent implements OnInit {
   ngOnInit(): void {
     // Fetch students
     // to use the observable, you need to subscribe to it
-    this.studentService.getStudent().subscribe(
+    this.studentService.getStudents().subscribe(
       (successResponse) => {
         // the result from the successResponse (the data from the API) will be passed on to this.students which is linked on the Student ui model
         this.students = successResponse;

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { StudentsComponent } from './students/students.component';
+import { ViewStudentComponent } from './students/view-student/view-student.component';
 
 const routes: Routes = [
   {
@@ -12,6 +13,11 @@ const routes: Routes = [
   {
     path: 'students',
     component: StudentsComponent
+  },
+  {
+    // syntax when u wanna access a student detail through id
+    path: 'students/:id',
+    component: ViewStudentComponent
   }
 ];
 

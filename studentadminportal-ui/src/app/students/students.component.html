@@ -54,6 +54,16 @@
         {{element.gender.description}} </td>
       </ng-container>
 
+      <!-- Edit Column -->
+      <ng-container matColumnDef="edit">
+        <th mat-header-cell *matHeaderCellDef>  </th>
+        <td mat-cell *matCellDef="let element">
+          <!-- this is like href="/students/:id" naka-array kapag madami na yung route na pupuntahan-->
+        <a [routerLink]="['/students', element.id]">
+          <mat-icon color="primary">edit</mat-icon>
+        </a> </td>
+      </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
