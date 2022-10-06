@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, TitleStrategy } from '@angular/router';
+import { Gender } from 'src/app/models/ui-models/genderui.model';
 import { Student } from 'src/app/models/ui-models/studentui.model';
+import { GenderService } from 'src/app/services/gender.service';
 import { StudentService } from '../student.service';
 
 @Component({
@@ -30,9 +33,10 @@ export class ViewStudentComponent implements OnInit {
       postalAddress: ''
     }
   }
+  genderList: Gender[] = []
 
   // si activated route yung kukuha ng parameters na galing sa route??
-  constructor(private readonly studentService: StudentService, private readonly route: ActivatedRoute) { }
+  constructor(private readonly studentService: StudentService, private readonly route: ActivatedRoute, private readonly genderService: GenderService, private snackbar: MatSnackBar) { }
 
   // paramMap is to read the route??
   ngOnInit(): void {
@@ -51,7 +55,28 @@ export class ViewStudentComponent implements OnInit {
               console.log(errorResponse);
             }
           );
+
+          this.genderService.getGenderList().subscribe(
+            successResponse => {
+              this.genderList = successResponse;
+            }
+          )
         }
+      }
+    );
+  }
+
+  onUpdate(): void {
+    // Call Student Service to Update Student
+    this.studentService.updateStudent(this.student.id, this.student).subscribe(
+      (successResponse) => {
+        // Show a notification
+        this.snackbar.open('Changes have been saved', undefined, {
+          duration: 2000
+        });
+      },
+      (errorResponse) => {
+        // Log it
       }
     );
   }
