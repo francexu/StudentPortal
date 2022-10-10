@@ -7,6 +7,7 @@ using StudentAdminPortal.API.Repository;
 using StudentAdminPortal.API.Repository.Interface;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace StudentAdminPortal.API.Controllers
@@ -16,12 +17,14 @@ namespace StudentAdminPortal.API.Controllers
     public class StudentsController : ControllerBase
     {
         private readonly IStudentRepository _repository;
+        private readonly IImageRepository _imageRepository;
         private readonly IMapper _mapper;
 
-        public StudentsController(IStudentRepository repository, IMapper mapper)
+        public StudentsController(IStudentRepository repository, IMapper mapper, IImageRepository imageRepository)
         {
             _repository = repository;
             _mapper = mapper;
+            _imageRepository = imageRepository;
         }
 
         [HttpGet]
@@ -89,6 +92,31 @@ namespace StudentAdminPortal.API.Controllers
             // best practice to use 201 (createdataction) for post requests
             // yung last parameter dapat yung object na pinass mo dito sa method pero since naka Student siya, kailangan pa i-convert sa dto
             return CreatedAtAction(nameof(GetStudent), new { studentId = newStudent.Id}, _mapper.Map<StudentDto>(newStudent));
+        }
+
+        [HttpPost("{studentId:guid}/upload-image")]
+        public async Task<IActionResult> UploadImage([FromRoute] Guid studentId, IFormFile profileImage)
+        {
+            // Check if student exists
+            if (await _repository.StudentExists(studentId))
+            {
+                // create a new file name for the image
+                var fileName = Guid.NewGuid() + Path.GetExtension(profileImage.FileName);
+
+                // Upload the Image to local storage
+                var fileImagePath = await _imageRepository.Upload(profileImage, fileName);
+
+                // Update the profile image path in the database
+                if (await _repository.UpdateProfileImage(studentId, fileImagePath))
+                {
+                    return Ok(fileImagePath);
+                };
+
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error uploading image");
+            }
+
+            // Otherwise
+            return NotFound();
         }
     }
 }
