@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router, TitleStrategy } from '@angular/router';
 import { Gender } from 'src/app/models/ui-models/genderui.model';
@@ -37,6 +38,8 @@ export class ViewStudentComponent implements OnInit {
   header = '';
   displayProfileImageUrl = '';
   genderList: Gender[] = []
+
+  @ViewChild('studentDetailsForm') studentDetailsForm?: NgForm;
 
   // si activated route yung kukuha ng parameters na galing sa route??
   constructor(private readonly studentService: StudentService, private readonly route: ActivatedRoute, private readonly genderService: GenderService, private snackbar: MatSnackBar, private router: Router) { }
@@ -86,18 +89,22 @@ export class ViewStudentComponent implements OnInit {
   }
 
   onUpdate(): void {
-    // Call Student Service to Update Student
-    this.studentService.updateStudent(this.student.id, this.student).subscribe(
-      (successResponse) => {
-        // Show a notification
-        this.snackbar.open('Changes have been saved', undefined, {
-          duration: 2000
-        });
-      },
-      (errorResponse) => {
-        // Log it
-      }
-    );
+
+    if (this.studentDetailsForm?.form.valid) {
+      // Call Student Service to Update Student
+      this.studentService.updateStudent(this.student.id, this.student).subscribe(
+        (successResponse) => {
+          // Show a notification
+          this.snackbar.open('Changes have been saved', undefined, {
+            duration: 2000
+          });
+        }
+      );
+    } else {
+      this.snackbar.open('Fill the required fields.', undefined, {
+        duration: 2000
+      });
+    };
   }
 
   onDelete(): void {
@@ -116,19 +123,26 @@ export class ViewStudentComponent implements OnInit {
   }
 
   onAdd(): void {
-    this.studentService.addStudent(this.student).subscribe(
-      (successResponse) => {
-        // if you want to redirect it to the student detail, use `students/${successRespose.id}` as URL take note of ``
-        this.router.navigateByUrl('students').then(() => {
-          this.snackbar.open('Record has been added', undefined, {
-            duration: 2000
-          });
-        })
-      },
-      (errorResponse) => {
-        // Log error
-      }
-    )
+    // check if form is valid
+    if (this.studentDetailsForm?.form.valid) {
+      this.studentService.addStudent(this.student).subscribe(
+        (successResponse) => {
+          // if you want to redirect it to the student detail, use `students/${successRespose.id}` as URL take note of ``
+          this.router.navigateByUrl('students').then(() => {
+            this.snackbar.open('Record has been added', undefined, {
+              duration: 2000
+            });
+          })
+        },
+        (errorResponse) => {
+          console.log(errorResponse);
+        }
+      )
+    } else {
+      this.snackbar.open('Fill the required fields.', undefined, {
+        duration: 2000
+      });
+    };
   }
 
   uploadImage(event: any): void {
