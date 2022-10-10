@@ -63,4 +63,18 @@ export class StudentService {
     return this.httpClient.post<Student>(this.baseApiUrl + '/api/students/add', addStudentRequest);
   }
 
+  uploadImage(studentId: string, file: File): Observable<any> {
+    const formData = new FormData();
+    // dapat same yung name ng "" sa nasa API
+    formData.append("profileImage", file);
+
+    return this.httpClient.post(this.baseApiUrl + '/api/students/' + studentId + '/upload-image', formData, {
+      responseType: 'text' // kasi di siya json format
+    });
+  }
+
+  getImagePath(relativePath: string) {
+    return `${this.baseApiUrl}/${relativePath}`;
+  }
+
 }

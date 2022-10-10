@@ -35,6 +35,7 @@ export class ViewStudentComponent implements OnInit {
   }
   isNewStudent = false;
   header = '';
+  displayProfileImageUrl = '';
   genderList: Gender[] = []
 
   // si activated route yung kukuha ng parameters na galing sa route??
@@ -53,6 +54,8 @@ export class ViewStudentComponent implements OnInit {
             // -> new Student Functionality
             this.isNewStudent = true;
             this.header = 'Add New Student';
+            // add default image to new student
+            this.setImage();
 
           } else {
             // -> Existing Student Functionality
@@ -63,6 +66,10 @@ export class ViewStudentComponent implements OnInit {
               (successResponse) => {
                 // para magamit mo sa html file
                 this.student = successResponse;
+                this.setImage();
+              },
+              (errorResponse) => {
+                this.setImage();
               }
             );
           }
@@ -122,5 +129,31 @@ export class ViewStudentComponent implements OnInit {
         // Log error
       }
     )
+  }
+
+  uploadImage(event: any): void {
+    if(this.studentId) {
+      const file: File = event.target.files[0];
+      this.studentService.uploadImage(this.studentId, file).subscribe(
+        (successResponse) => {
+          this.student.profileImageUrl = successResponse;
+          this.setImage();
+
+          this.snackbar.open('Image has been uploaded succesfully', undefined, {
+            duration: 2000
+          });
+        }
+      );
+    }
+  }
+
+  private setImage(): void {
+    if(this.student.profileImageUrl) {
+      // Fetch the image by URL
+      this.displayProfileImageUrl = this.studentService.getImagePath(this.student.profileImageUrl);
+    } else {
+      // Display default image
+      this.displayProfileImageUrl = '/assets/user-icon.jpg';
+    }
   }
 }
