@@ -33,6 +33,8 @@ export class ViewStudentComponent implements OnInit {
       postalAddress: ''
     }
   }
+  isNewStudent = false;
+  header = '';
   genderList: Gender[] = []
 
   // si activated route yung kukuha ng parameters na galing sa route??
@@ -46,21 +48,31 @@ export class ViewStudentComponent implements OnInit {
         this.studentId = params.get('id');
 
         if(this.studentId) {
-          this.studentService.getStudent(this.studentId).subscribe(
-            (successResponse) => {
-              // para magamit mo sa html file
-              this.student = successResponse;
-            },
-            (errorResponse) => {
-              console.log(errorResponse);
-            }
-          );
+          // check if route contains keyword 'Add' para ma-determine kung mag-add siya or mag-update
+          if(this.studentId.toLowerCase() === 'Add'.toLowerCase()) {
+            // -> new Student Functionality
+            this.isNewStudent = true;
+            this.header = 'Add New Student';
 
+          } else {
+            // -> Existing Student Functionality
+            this.isNewStudent = false;
+            this.header = 'Edit Student';
+
+            this.studentService.getStudent(this.studentId).subscribe(
+              (successResponse) => {
+                // para magamit mo sa html file
+                this.student = successResponse;
+              }
+            );
+          }
+
+          // since need ng both add and update yung gender, pwedeng nasa labas lang siya
           this.genderService.getGenderList().subscribe(
             successResponse => {
               this.genderList = successResponse;
             }
-          )
+          );
         }
       }
     );
@@ -92,6 +104,22 @@ export class ViewStudentComponent implements OnInit {
       },
       (errorResponse) => {
         // Log it
+      }
+    )
+  }
+
+  onAdd(): void {
+    this.studentService.addStudent(this.student).subscribe(
+      (successResponse) => {
+        // if you want to redirect it to the student detail, use `students/${successRespose.id}` as URL take note of ``
+        this.router.navigateByUrl('students').then(() => {
+          this.snackbar.open('Record has been added', undefined, {
+            duration: 2000
+          });
+        })
+      },
+      (errorResponse) => {
+        // Log error
       }
     )
   }

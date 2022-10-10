@@ -15,6 +15,8 @@ namespace StudentAdminPortal.API.Mapper
             // after map is to map yung properties na wala directly sa main model
             CreateMap<UpdateStudentDto, Student>()
                 .AfterMap<UpdateStudentRequestAfterMap>();
+            CreateMap<AddStudentDto, Student>()
+                .AfterMap<AddStudentRequestAfterMap>();
         }
     }
 }

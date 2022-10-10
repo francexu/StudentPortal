@@ -17,5 +17,7 @@ namespace StudentAdminPortal.API.Repository.Interface
         Task<Student> UpdateStudent(Guid studentId, Student student);
 
         Task<Student> DeleteStudentAsync(Guid studentId);
+
+        Task<Student> AddStudentAsync(Student student);
     }
 }

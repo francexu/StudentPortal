@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "+XDNK/GNYeQvkbU1opIYJbDhWVMKG1tDPOXbdS9dIflOqUuDCx0VmEOGfUqrAVFW+NpYFR0XQkEqxVajr/QQiw==",
+  "dgSpecHash": "t+yQLP7LJs/kv3+i+3bIkNSpsITXX9I9ddjv0h90Aqg8HqLqU2TzkO6HOK4ug48YsP22su/Jakv4IrBfbzPDJg==",
   "success": true,
   "projectFilePath": "C:\\Users\\admin\\source\\repos\\StudentAdminApp\\StudentAdminPortal.API\\StudentAdminPortal.API.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,7 @@
     "C:\\Users\\admin\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\11.0.0\\automapper.extensions.microsoft.dependencyinjection.11.0.0.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.aspnet.webapi.client\\5.2.9\\microsoft.aspnet.webapi.client.5.2.9.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",
+    "C:\\Users\\admin\\.nuget\\packages\\microsoft.aspnetcore.mvc.versioning\\5.0.0\\microsoft.aspnetcore.mvc.versioning.5.0.0.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.aspnetcore.razor\\2.2.0\\microsoft.aspnetcore.razor.2.2.0.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.aspnetcore.razor.language\\3.1.0\\microsoft.aspnetcore.razor.language.3.1.0.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.aspnetcore.razor.runtime\\2.2.0\\microsoft.aspnetcore.razor.runtime.2.2.0.nupkg.sha512",

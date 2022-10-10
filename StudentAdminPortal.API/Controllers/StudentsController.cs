@@ -32,8 +32,8 @@ namespace StudentAdminPortal.API.Controllers
         }
 
         [HttpGet]
-        [Route("{studentId:guid}")] 
-        public async Task<IActionResult> GetStudentAsync([FromRoute] Guid studentId)
+        [Route("{studentId:guid}"), ActionName("GetStudent")] 
+        public async Task<IActionResult> GetStudent([FromRoute] Guid studentId)
         {
             // Fetch student detail
             var student = await _repository.GetStudentAsync(studentId);
@@ -79,6 +79,16 @@ namespace StudentAdminPortal.API.Controllers
             }
 
             return NotFound();
+        }
+
+        [HttpPost("add")]
+        public async Task<IActionResult> AddStudentAsync([FromBody] AddStudentDto addStudentDto)
+        {
+            var newStudent = await _repository.AddStudentAsync(_mapper.Map<Student>(addStudentDto));
+
+            // best practice to use 201 (createdataction) for post requests
+            // yung last parameter dapat yung object na pinass mo dito sa method pero since naka Student siya, kailangan pa i-convert sa dto
+            return CreatedAtAction(nameof(GetStudent), new { studentId = newStudent.Id}, _mapper.Map<StudentDto>(newStudent));
         }
     }
 }
